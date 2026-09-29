@@ -1,19 +1,21 @@
-const totalIntegers = function(input, total = 0) {
+const totalIntegers = function(input, isFirstCall = true) {
+    if(isFirstCall && Number.isInteger(input)) return undefined;
+    
     if(Number.isInteger(input)) 
         return 1;
-    else if(!Array.isArray(input) || !typeof input === "object")
-        return 0; 
-    
-    let res = 0;
-    for(var item in input){
-        res += totalIntegers(item);
+    else if(!Array.isArray(input) && typeof input !== "object")
+        return undefined; 
+    else{
+        let res = 0;
+
+        for(var item in input){
+            let itemValue = totalIntegers(input[item], false);
+            if(itemValue !== undefined) res += itemValue;
+        }
+        
+        return res;
     }
-
-    return res;
 };
-
-console.log(totalIntegers([1]));
-console.log(totalIntegers([[[5], 3], 0, 2, ['foo'], [], [4, [5, 6]]]));
 
 // Do not edit below this line
 module.exports = totalIntegers;
